@@ -8,6 +8,12 @@ class Course_plan_assessment extends Model
 {
     //
     protected $table = 'course_plan_assessments';
+
+    protected $fillable = [
+        'course_plan_id',
+        'name',
+        'percentage',
+      ];
     
 
     public function course_plan()

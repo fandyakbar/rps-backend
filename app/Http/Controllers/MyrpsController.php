@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\model\course_plan;
 
+use App\model\course_lo_assessment;
+use App\model\course_plan_assessment;
+use App\model\course_lo;
+use App\model\course;
+use App\model\course_plan_lecturer;
+
 class MyrpsController extends Controller
 {
     /**
@@ -48,6 +54,26 @@ class MyrpsController extends Controller
     public function show($id)
     {
         //
+        $namamMtkul =  Course_plan::join('courses','courses.id', '=', 'course_plans.course_id')
+        ->where('course_plans.id','=', $id)
+        ->select('courses.name', 'courses.semester', 'courses.credit')
+        ->get();
+
+        $cpmk = Course_lo::where('course_los.course_plan_id','=',$id)
+        ->select('id AS cpmk_id','code','name')
+        ->get();
+
+        $assessment = Course_plan_assessment::where('Course_plan_assessments.course_plan_id','=',$id)
+        ->select('id AS assessment_id','percentage','name')
+        ->get();
+
+        return response()->json([
+            [
+                'matkul' => $namamMtkul,
+                'cpmk' => $cpmk,
+                'assessment' => $assessment,
+            ],
+        ]);
     }
 
     /**
