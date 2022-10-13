@@ -25,11 +25,9 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::get('me', 'AuthController@me');
+    Route::get('mes', 'AuthController@mes');
 
 });
-
-//  Route::post('login', 'AuthController@login')->name('login');
-// Route::post('logout', 'AuthController@logout')->name('logout');
 
 
 Route::get('myrps', 'MyrpsController@index') -> name ('myrps.index');
@@ -60,6 +58,31 @@ Route::get('assessment/show/{id}', 'AssessmentController@show') -> name('show.as
 Route::post('assessment/show/{id}', 'AssessmentController@update') -> name('update.assessment');
 Route::post('assessment/{id}', 'AssessmentController@create') -> name('create.assessment');
 Route::delete('assessment/delete/{id}', 'AssessmentController@delete') -> name('assessment.delete');
+
+// Detail Assessment
+Route::get('rubrikassessment/{id}', 'DetailAssessmentController@get') -> name('get.rubrikAssessment');
+Route::get('rubrikassessment/show/{id}', 'DetailAssessmentController@show') -> name('show.rubrikAssessment');
+Route::post('rubrikassessment/show/{id}', 'DetailAssessmentController@update') -> name('show.rubrikAssessment');
+Route::post('rubrikassessment/{id}', 'DetailAssessmentController@create') -> name('create.rubrikAssessment');
+Route::delete('rubrikassessment/delete/{id}', 'DetailAssessmentController@delete') -> name('delete.rubrikAssessment');
+
+// CPMK Assess
+Route::get('rubrikassessment/cpmk/{id}', 'DetailAssessmentController@getCPMK') -> name('getCPMK.rubrikAssessment');
+Route::post('rubrikassessment/cpmk/{id}', 'DetailAssessmentController@addCPMK') -> name('addCPMK.rubrikAssessment');
+Route::delete('rubrikassessment/cpmk/{idcpmk}/{idDetail}', 'DetailAssessmentController@deleteCPMK') -> name('deleteCPMK.rubrikAssessment');
+
+// Dashboard Lengkap
+Route::get('rubrikassessments/{id}', 'DetailAssessmentController@index') -> name('index.rubrikAssessment');
+
+// Task
+Route::get('task/{id}', 'TaskController@get') -> name('get.rubrikAssessment');
+Route::post('task/{id}', 'TaskController@create') -> name('create.rubrikAssessment');
+Route::delete('task/{id}', 'TaskController@delete') -> name('delete.rubrikAssessment');
+Route::get('task/show/{id}', 'TaskController@show') -> name('show.rubrikAssessment');
+Route::post('task/show/{id}', 'TaskController@update') -> name('update.rubrikAssessment');
+
+
+
 
 // Rubrik
 Route::get('rubrik/{id}', 'RubrikController@show') -> name('show.rubrik');

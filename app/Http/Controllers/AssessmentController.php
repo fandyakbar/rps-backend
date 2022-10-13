@@ -30,11 +30,41 @@ class AssessmentController extends Controller
             $total =$total + $jumlahases->percentage;
         }
 
+
+        $assessment = Course_plan_assessment::where('Course_plan_assessments.course_plan_id','=',$id)
+        ->select('id AS assessment_id','percentage','name')
+        ->get();
+
+         // Ambil Nilai Total Untuk Assessment
+         $totalAsses = array();
+         $indeksAssess = 0;
+         $totalAkhir = 0;
+ 
+         foreach ($assessment as $assessitem) {
+             $ambilJumlahAssess = Course_lo_assessment::join('course_plan_assessments','course_plan_assessments.id','=','course_lo_assessments.course_plan_assessment_id')
+             ->where('course_plan_assessments.id','=' , $assessitem->assessment_id) 
+             ->select('precentage')
+             ->get();
+ 
+             $penjumlahan = 0;
+ 
+             foreach ($ambilJumlahAssess as $jumlahAssess) {
+                 $penjumlahan = $penjumlahan+$jumlahAssess->precentage;
+             }
+ 
+             $totalAsses[$indeksAssess] = $penjumlahan;
+             $totalAkhir = $totalAkhir+$totalAsses[$indeksAssess];
+             $indeksAssess++;
+         }
+         $totalAsses[$indeksAssess]=$totalAkhir;
+         $total = $totalAkhir;
+
         return response()->json([
             [
                 'matkul' => $namamMtkul,
                 'datas' => $data,
                 'total' => $total,
+                'totalAsses' => $totalAsses,
             ],
         ]);
     }

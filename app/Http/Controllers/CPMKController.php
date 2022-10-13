@@ -25,10 +25,40 @@ class CPMKController extends Controller
         ->where('course_plans.id','=', $id)
         ->get();
 
+
+        // 
+        $cpmk = Course_lo::where('course_los.course_plan_id','=',$id)
+        ->select('id AS cpmk_id','code','name')
+        ->get();
+
+        $totalcpmk = array();
+        $indeksarr = 0;
+        
+        
+        foreach ($cpmk as $cpmktot) {
+            $ambiltotal = Course_lo_assessment::join('course_los','course_los.id','=','course_lo_assessments.course_lo_id')
+            ->where('course_los.id','=' , $cpmktot->cpmk_id) 
+            ->select('precentage')
+            ->get();
+
+            $totalasli = 0;
+
+            foreach ($ambiltotal as $jumlahtota) {
+                $totalasli = $totalasli + $jumlahtota->precentage;
+            }
+
+            $totalcpmk[$indeksarr] = $totalasli;
+            $indeksarr++;
+
+        }
+
+        // 
+
         return response()->json([
             [
                 'matkul' => $namamMtkul,
                 'datas' => $data,
+                'totalcpmk' => $totalcpmk,
             ],
         ]);
     }

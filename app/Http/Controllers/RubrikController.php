@@ -52,6 +52,7 @@ class RubrikController extends Controller
         $data=Course_plan::join('courses','courses.id','=','course_plans.course_id')
         ->join('course_plan_lecturers','course_plan_lecturers.course_plan_id', '=', 'course_plans.id')
         ->where('course_plan_lecturers.lecturer_id','=', $id_user)
+        ->orderBy('course_plans.semester', 'ASC')
         ->get();
         
         return $data;

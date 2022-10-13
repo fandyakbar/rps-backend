@@ -4,10 +4,10 @@ namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Course_plan_lecture extends Model
+class Course_plan_lecturer extends Model
 {
     //
-    protected $table = ' course_plan_lecturers';
+    protected $table = 'course_plan_lecturers';
 
     public function lecturer()
     {
