@@ -12,6 +12,12 @@ use App\model\course;
 use App\model\course_plan_lecturer;
 use App\model\lecturer;
 
+use App\model\Assessment_detail;
+use App\model\Assessment_detail_lo;
+use App\model\Assessment_category;
+use App\model\Assessment_category_detail;
+use App\model\Detail_category;
+
 class RPSController extends Controller
 {
     //
@@ -21,6 +27,14 @@ class RPSController extends Controller
         $data=Course_plan::orderBy('semester', 'ASC')->get();
         $datas=Course_plan::orderBy('semester', 'ASC')
         ->get();
+
+        $ambilId = array();
+        $indeks = 0;
+
+       foreach ($datas as $getIdDosen) {
+        $ambilId[$indeks] = $getIdDosen->course_plan_lecturer;
+        $indeks++;
+       }
 
         $parameter = array();
         $indeks = 0;
@@ -39,7 +53,8 @@ class RPSController extends Controller
         return response()->json([
             [
                 'rps' => $datas,
-                'checker' => $parameter
+                'checker' => $parameter,
+                'ambilId' => $ambilId,
             ],
         ]);
     }
@@ -109,7 +124,7 @@ class RPSController extends Controller
 
         $namamMtkul =  Course_plan::join('courses','courses.id', '=', 'course_plans.course_id')
         ->where('course_plans.id','=', $id)
-        ->select('courses.name','course_plans.semester','course_plans.credit')
+        ->select('courses.name','course_plans.semester','course_plans.credit','course_plans.material','course_plans.description')
         ->get();
 
         $mataKuliah = course_plan::where('id','=', $id)->first();
@@ -196,11 +211,7 @@ class RPSController extends Controller
 
         $kolomPDF[$indeksKolom] = "Total" ;
 
-
-            
-        
-    
-        
+       
         
         return response()->json([
             [
@@ -215,6 +226,7 @@ class RPSController extends Controller
                 'kolomPDF' => $kolomPDF,
                 'tabelPDF' => $tabelPDF,
                 'namaDosen' => $namaDosen,
+                
             ],
             
         ]);

@@ -14,7 +14,7 @@ class Assessment_detail_lo extends Model
         'course_lo_id',
     ];
    
-    public function Assessment_detail()
+    public function assessment_detail()
     {
         return $this->belongsTo(Assessment_detail::class, 'assessment_detail_id', 'id');
     }

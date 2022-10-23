@@ -27,9 +27,9 @@ class Course_plan extends Model
     }
 
    
-    public function course_plan_assesment()
+    public function course_plan_assessment()
     {
-        return $this->hasMany(Course_plan_assesment::class, 'course_plan_id', 'id');
+        return $this->hasMany(Course_plan_assessment::class, 'course_plan_id', 'id');
     }
 
     

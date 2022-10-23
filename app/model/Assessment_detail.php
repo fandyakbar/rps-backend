@@ -20,21 +20,24 @@ class Assessment_detail extends Model
 
       static $validasi_tambah = [
         'criteria' => 'required|max:100',
-        'inferior' =>'required',
-        'average' => 'required',
-        'good' => 'required',
-        'Excellent' => 'required',
+       
     ];
 
    
-    public function Course_plan_assessment()
+    public function course_plan_assessment()
     {
         return $this->belongsTo(Course_plan_assessment::class, 'course_plan_assessment_id', 'id');
     }
 
 
-    public function Assessment_detail_lo()
+    public function assessment_detail_lo()
     {
-        return $this->hasMany(Assessment_detail_lo::class, 'assessment_id', 'id');
+        return $this->hasMany(Assessment_detail_lo::class, 'assessment_detail_id', 'id');
+    }
+
+   
+    public function detail_category()
+    {
+        return $this->hasMany(Detail_category::class, 'assessment_detail_id', 'id');
     }
 }

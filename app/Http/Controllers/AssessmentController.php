@@ -11,6 +11,12 @@ use App\model\course_plan;
 use App\model\course;
 use App\model\course_plan_lecturer;
 
+use App\model\Assessment_detail;
+use App\model\Assessment_detail_lo;
+use App\model\Assessment_category;
+use App\model\Assessment_category_detail;
+use App\model\Detail_category;
+
 class AssessmentController extends Controller
 {
     //
@@ -36,28 +42,28 @@ class AssessmentController extends Controller
         ->get();
 
          // Ambil Nilai Total Untuk Assessment
-         $totalAsses = array();
-         $indeksAssess = 0;
-         $totalAkhir = 0;
- 
-         foreach ($assessment as $assessitem) {
-             $ambilJumlahAssess = Course_lo_assessment::join('course_plan_assessments','course_plan_assessments.id','=','course_lo_assessments.course_plan_assessment_id')
-             ->where('course_plan_assessments.id','=' , $assessitem->assessment_id) 
-             ->select('precentage')
-             ->get();
- 
-             $penjumlahan = 0;
- 
-             foreach ($ambilJumlahAssess as $jumlahAssess) {
-                 $penjumlahan = $penjumlahan+$jumlahAssess->precentage;
-             }
- 
-             $totalAsses[$indeksAssess] = $penjumlahan;
-             $totalAkhir = $totalAkhir+$totalAsses[$indeksAssess];
-             $indeksAssess++;
-         }
-         $totalAsses[$indeksAssess]=$totalAkhir;
-         $total = $totalAkhir;
+        $totalAsses = array();
+        $indeksAssess = 0;
+        $totalAkhir = 0;
+
+        foreach ($assessment as $assessitem) {
+            $ambilJumlahAssess = Course_lo_assessment::join('course_plan_assessments','course_plan_assessments.id','=','course_lo_assessments.course_plan_assessment_id')
+            ->where('course_plan_assessments.id','=' , $assessitem->assessment_id) 
+            ->select('precentage')
+            ->get();
+
+            $penjumlahan = 0;
+
+            foreach ($ambilJumlahAssess as $jumlahAssess) {
+                $penjumlahan = $penjumlahan+$jumlahAssess->precentage;
+            }
+
+            $totalAsses[$indeksAssess] = $penjumlahan;
+            $totalAkhir = $totalAkhir+$totalAsses[$indeksAssess];
+            $indeksAssess++;
+        }
+        $totalAsses[$indeksAssess]=$totalAkhir;
+        $total = $totalAkhir;
 
         return response()->json([
             [
@@ -75,6 +81,7 @@ class AssessmentController extends Controller
             'course_plan_id' => $id,
             'name' => request('name'),
             'percentage' => request('percentage'),
+            'flag' => request('kelompok'),
         ]);
 
         $cpmk = course_lo::where('course_plan_id','=', $id)->get();
@@ -113,7 +120,28 @@ class AssessmentController extends Controller
         if ($parameter) {
             $musnah = course_lo_assessment::where('course_plan_assessment_id','=', $id)->delete();
         }
+        // 
+        $params = Assessment_category_detail::where('course_plan_assessment_id','=', $id)->get();
+
+        if ($params) {
+            $params = Assessment_category_detail::where('course_plan_assessment_id','=', $id)->delete();
+        }
+
+        $asDetail = assessment_detail::where('course_plan_assessment_id','=', $id)->get();
+        // Hapus 2 & 3
+        if ($asDetail) {
+            foreach ($asDetail as $hapus_lo) {
+                $destroy = Assessment_detail_lo::where('assessment_detail_id','=', $hapus_lo->id)->delete();
+                $destroy2 = Detail_category::where('assessment_detail_id','=', $hapus_lo->id)->delete();
+
+            }
+            $destroy3 = assessment_detail::where('course_plan_assessment_id','=', $id)->delete();
+        }
+
+
         
+
+        // Hapus Terakhir
         $hapus = Course_plan_assessment::where('id', $id)
         ->delete();
 

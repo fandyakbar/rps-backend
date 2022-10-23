@@ -59,12 +59,24 @@ Route::post('assessment/show/{id}', 'AssessmentController@update') -> name('upda
 Route::post('assessment/{id}', 'AssessmentController@create') -> name('create.assessment');
 Route::delete('assessment/delete/{id}', 'AssessmentController@delete') -> name('assessment.delete');
 
+
+
+
 // Detail Assessment
 Route::get('rubrikassessment/{id}', 'DetailAssessmentController@get') -> name('get.rubrikAssessment');
 Route::get('rubrikassessment/show/{id}', 'DetailAssessmentController@show') -> name('show.rubrikAssessment');
+Route::get('rubrikassessment/shows/{id}', 'DetailAssessmentController@shows') -> name('shows.rubrikAssessment');
 Route::post('rubrikassessment/show/{id}', 'DetailAssessmentController@update') -> name('show.rubrikAssessment');
 Route::post('rubrikassessment/{id}', 'DetailAssessmentController@create') -> name('create.rubrikAssessment');
 Route::delete('rubrikassessment/delete/{id}', 'DetailAssessmentController@delete') -> name('delete.rubrikAssessment');
+
+// Kategori
+Route::get('kategori/{id}', 'CategoryController@get') -> name('get.Category');
+Route::post('kategori/{id}', 'CategoryController@add') -> name('add.Category');
+Route::post('kategories/rubrik', 'CategoryController@updateRubrik') -> name('update.Category');
+Route::post('kategoris', 'CategoryController@adds') -> name('adds.Category');
+Route::delete('kategori/{idkategori}/{idAssessment}', 'CategoryController@delete') -> name('delete.Category');
+
 
 // CPMK Assess
 Route::get('rubrikassessment/cpmk/{id}', 'DetailAssessmentController@getCPMK') -> name('getCPMK.rubrikAssessment');
