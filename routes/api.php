@@ -36,7 +36,7 @@ Route::get('myrps', 'MyrpsController@index') -> name ('myrps.index');
 Route::get('dashboard', 'RPSCOntroller@list') -> name('list.rps');
 Route::get('dashboard/{id}', 'RPSCOntroller@get') -> name('get.rps');
 
-// Bagian Ambil Nilai Rubrik
+// Bagian Ambil Nilai Komponen Penilaian
 Route::get('rubrik', 'RubrikController@index') -> name ('rubrik.index');
 Route::get('penilaian', 'RubrikController@penilaian') -> name ('penilaian.index');
 Route::get('cpmk', 'RubrikController@cpmk') -> name ('cpmk.index');
@@ -58,8 +58,6 @@ Route::get('assessment/show/{id}', 'AssessmentController@show') -> name('show.as
 Route::post('assessment/show/{id}', 'AssessmentController@update') -> name('update.assessment');
 Route::post('assessment/{id}', 'AssessmentController@create') -> name('create.assessment');
 Route::delete('assessment/delete/{id}', 'AssessmentController@delete') -> name('assessment.delete');
-
-
 
 
 // Detail Assessment
@@ -92,8 +90,6 @@ Route::post('task/{id}', 'TaskController@create') -> name('create.rubrikAssessme
 Route::delete('task/{id}', 'TaskController@delete') -> name('delete.rubrikAssessment');
 Route::get('task/show/{id}', 'TaskController@show') -> name('show.rubrikAssessment');
 Route::post('task/show/{id}', 'TaskController@update') -> name('update.rubrikAssessment');
-
-
 
 
 // Rubrik

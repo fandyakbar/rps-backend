@@ -33,7 +33,7 @@ class CategoryController extends Controller
 
         $ambilrubrik = Detail_category::join('assessment_details','assessment_details.id','=','detail_categories.assessment_detail_id')
         ->where('assessment_details.course_plan_assessment_id','=', $id)
-        ->select('detail_categories.assessment_category_id','detail_categories.assessment_detail_id','detail_categories.value')
+        ->select('detail_categories.assessment_category_id','detail_categories.assessment_detail_id','detail_categories.value','detail_categories.point')
         ->orderBy('detail_categories.assessment_category_id', 'ASC')
         ->get();
 
@@ -118,11 +118,29 @@ class CategoryController extends Controller
 
     public function updateRubrik(Request $request)
     {
-        $update= detail_category::where('assessment_detail_id',$request->id_kriteria)
-        ->where('assessment_category_id', $request->id_kategori)
-        ->update([
-            'value' => $request->nilai
-                ]);
+        if ($request->nilai != null && $request->point != null) {
+            $update= detail_category::where('assessment_detail_id',$request->id_kriteria)
+            ->where('assessment_category_id', $request->id_kategori)
+            ->update([
+                'value' => $request->nilai,
+                'point' => $request->point,
+                    ]);
+        } elseif ($request->nilai != null) {
+            $update= detail_category::where('assessment_detail_id',$request->id_kriteria)
+            ->where('assessment_category_id', $request->id_kategori)
+            ->update([
+                'value' => $request->nilai,
+                    ]);
+
+        } elseif ($request->point != null) {
+
+            $update= detail_category::where('assessment_detail_id',$request->id_kriteria)
+            ->where('assessment_category_id', $request->id_kategori)
+            ->update([
+                'point' => $request->point,
+                    ]);
+            
+        }
 
         if ($update) {
             return response()->json([

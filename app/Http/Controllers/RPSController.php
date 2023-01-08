@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 use App\model\course_lo_assessment;
 use App\model\course_plan_assessment;
@@ -10,13 +11,15 @@ use App\model\course_lo;
 use App\model\course_plan;
 use App\model\course;
 use App\model\course_plan_lecturer;
-use App\model\lecturer;
+use App\model\Lecturer;
 
 use App\model\Assessment_detail;
 use App\model\Assessment_detail_lo;
 use App\model\Assessment_category;
 use App\model\Assessment_category_detail;
 use App\model\Detail_category;
+use App\model\Course_lo_detail;
+use App\model\Curriculum_lo;
 
 class RPSController extends Controller
 {
@@ -31,10 +34,18 @@ class RPSController extends Controller
         $ambilId = array();
         $indeks = 0;
 
-       foreach ($datas as $getIdDosen) {
-        $ambilId[$indeks] = $getIdDosen->course_plan_lecturer;
-        $indeks++;
-       }
+        
+        foreach ($datas as $getIdDosen) {
+            $ambilId[$indeks] = $getIdDosen->course_plan_lecturer;
+            $ambilNama= array();
+            $indeksnama = 0;
+            foreach ($getIdDosen->course_plan_lecturer as $key) {
+                $ambilNama[$indeksnama] = $key->lecturer;
+                $indeksnama++;
+            }
+            $indeks++;
+        }
+
 
         $parameter = array();
         $indeks = 0;
@@ -211,7 +222,25 @@ class RPSController extends Controller
 
         $kolomPDF[$indeksKolom] = "Total" ;
 
-       
+        
+        $cpmks = Course_lo::where('course_los.course_plan_id','=',$id)
+        ->get();
+
+
+        $getidcpl = array();
+        $indekscpl = 0;
+
+        $queryid = "SELECT DISTINCT curriculum_lo_id, name
+        FROM course_lo_details JOIN curriculum_los ON curriculum_los.id= course_lo_details.curriculum_lo_id
+        WHERE course_lo_id IN 
+        (SELECT id from course_los WHERE course_los.course_plan_id=?)";
+        
+        $hasilcpl = DB::select($queryid, [$id]);
+
+
+        // $hasilcpl = DB::select('SELECT name FROM curriculum_los WHERE id IN ?', [7, 8]);
+
+
         
         return response()->json([
             [
@@ -226,6 +255,7 @@ class RPSController extends Controller
                 'kolomPDF' => $kolomPDF,
                 'tabelPDF' => $tabelPDF,
                 'namaDosen' => $namaDosen,
+                'cpl' => $hasilcpl,
                 
             ],
             
